@@ -3,7 +3,7 @@
   --bg-color: #050505;
   --card-color: #111;
   --muted-color: #8d8d8d;
-  --text-color: #fff;
+  --text-color: #a58c5b;
 
   --farsi-font: Vazirmatn-Regular;
   --farsi-second-font: MRTWIN2;
@@ -97,7 +97,7 @@ textarea {
 
 .demos--header {
   flex-shrink: 0;
-  width: min(100%, 1080px);
+  width: min(100%, 1480px);
   margin-inline: auto;
   padding-inline: var(--page-pad);
 }
@@ -154,7 +154,7 @@ textarea {
 }
 
 .demos--inner {
-  width: min(100%, 1080px);
+  width: min(100%, 1480px);
   margin-inline: auto;
   padding: 1.25rem var(--page-pad)
     calc(3.5rem + env(safe-area-inset-bottom, 0px));
@@ -169,10 +169,9 @@ textarea {
   gap: clamp(1rem, 2.4vw, 1.6rem);
 }
 
-@container (min-width: 640px) {
-  .demos--grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.demos--grid .demo--card {
+  width: min(95%, max(320px, calc((100svh - 220px) * 2)));
+  margin-inline: auto;
 }
 
 /* demo card ---------- */
@@ -221,6 +220,53 @@ textarea {
     radial-gradient(circle at 70% 20%, #ffffff, transparent 65%), #d9dce4;
 }
 
+.demo--poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-color: var(--poster-b, #0b0b0f);
+  background-image:
+    var(--poster-image, none),
+    radial-gradient(
+      circle at 70% 20%,
+      var(--poster-a, #3a3a48),
+      transparent 70%
+    ),
+    linear-gradient(150deg, var(--poster-a, #3a3a48), var(--poster-b, #0b0b0f));
+  background-size: cover;
+  background-position: center;
+  transition: opacity 0.5s ease;
+}
+
+.demo--card[data-theme="light"] .demo--poster {
+  --poster-a: #ffffff;
+  --poster-b: #cfd3de;
+}
+
+.demo--card:nth-child(1) .demo--poster {
+  --poster-image: url(../image/video-covers/archi-light.webp);
+}
+.demo--card:nth-child(2) .demo--poster {
+  --poster-image: url(../image/video-covers/archi-dark.webp);
+}
+.demo--card:nth-child(3) .demo--poster {
+  --poster-image: url(../image/video-covers/ph-light.webp);
+}
+.demo--card:nth-child(4) .demo--poster {
+  --poster-image: url(../image/video-covers/ph-dark.webp);
+}
+.demo--card:nth-child(5) .demo--poster {
+  --poster-image: url(../image/video-covers/web-light.webp);
+}
+.demo--card:nth-child(6) .demo--poster {
+  --poster-image: url(../image/video-covers/web-dark.webp);
+}
+
+.demo--media.has-played .demo--poster {
+  opacity: 0;
+}
+
 .demo--video {
   position: absolute;
   inset: 0;
@@ -234,6 +280,7 @@ textarea {
 .demo--placeholder {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: none;
   flex-direction: column;
   align-items: center;
@@ -447,7 +494,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
+  padding: 3px 9px;
   border-radius: 999px;
   border: 1px solid #ffffff38;
   background: #ffffff14;
@@ -822,11 +869,11 @@ textarea {
   background: conic-gradient(
     from 0deg,
     #ffffff,
-    #8fb4ff,
-    #b99cff,
-    #ff9ecb,
-    #ffe0a3,
-    #ffffff
+    #a58c5b,
+    #a58c5b,
+    #a58c5b,
+    #a58c5b,
+    #a58c5b
   );
   filter: blur(18px);
   opacity: 0.55;
@@ -896,7 +943,7 @@ textarea {
   flex-shrink: 0;
   width: 90px;
   height: 1px;
-  background: #ffffff55;
+  background: #a58c5b;
   margin: 22px 0;
 }
 

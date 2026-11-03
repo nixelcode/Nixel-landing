@@ -175,7 +175,7 @@ document.querySelectorAll(".demo--media").forEach((media) => {
 
   video.addEventListener("play", () => {
     players.forEach((p) => p.video !== video && p.video.pause());
-    media.classList.add("is-playing");
+    media.classList.add("is-playing", "has-played");
     playBtn.setAttribute("aria-label", "توقف ویدیو");
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(loop);
