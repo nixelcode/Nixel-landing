@@ -5,14 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050505" />
     <title>NIXEL LANDING PAGE</title>
+    <meta
+      name="description"
+      content="قالب پورتفولیو نیکسل؛ سه دموی معمار، عکاس و طراح سایت."
+    />
+
+    <!-- preload critical assets -->
+    <link
+      rel="preload"
+      href="./assets/font/farsi-font/Vazirmatn-Regular.woff"
+      as="font"
+      type="font/woff"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="./assets/image/profile-img.webp"
+      as="image"
+      type="image/webp"
+    />
     <link rel="stylesheet" href="./assets/css/style.css" />
 
-    <!-- ====================== FONT AWESOME ======================= -->
+    <!-- ====================== FONT AWESOME (non-blocking) ======================= -->
 
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+      />
+    </noscript>
   </head>
   <body dir="rtl">
     <div class="container" id="mainContainer">
@@ -39,7 +67,7 @@
                   <div class="demo--poster" aria-hidden="true"></div>
                   <video
                     class="demo--video"
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     loop
                   >
@@ -87,7 +115,7 @@
                   <button
                     class="demo--view"
                     type="button"
-                    data-image="./assets/screenshots/demo-architect/archi-light.jpg"
+                    data-image="./assets/screenshots/demo-architect/archi-light.webp"
                     data-title="دموی اول · حالت روشن"
                     aria-label="مشاهده نسخه موبایل دموی اول، حالت روشن"
                   >
@@ -103,7 +131,7 @@
                   <div class="demo--poster" aria-hidden="true"></div>
                   <video
                     class="demo--video"
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     loop
                   >
@@ -147,7 +175,7 @@
                   <button
                     class="demo--view"
                     type="button"
-                    data-image="./assets/screenshots/demo-architect/archi-dark.jpg"
+                    data-image="./assets/screenshots/demo-architect/archi-dark.webp"
                     data-title="دموی اول · حالت تیره"
                     aria-label="مشاهده نسخه موبایل دموی اول، حالت تیره"
                   >
@@ -163,7 +191,7 @@
                   <div class="demo--poster" aria-hidden="true"></div>
                   <video
                     class="demo--video"
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     loop
                   >
@@ -207,7 +235,7 @@
                   <button
                     class="demo--view"
                     type="button"
-                    data-image="./assets/screenshots/demo-photographer/light.jpg"
+                    data-image="./assets/screenshots/demo-photographer/light.webp"
                     data-title="دموی دوم · حالت روشن"
                     aria-label="مشاهده نسخه موبایل دموی دوم، حالت روشن"
                   >
@@ -223,7 +251,7 @@
                   <div class="demo--poster" aria-hidden="true"></div>
                   <video
                     class="demo--video"
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     loop
                   >
@@ -267,7 +295,7 @@
                   <button
                     class="demo--view"
                     type="button"
-                    data-image="./assets/screenshots/demo-photographer/dark.jpg"
+                    data-image="./assets/screenshots/demo-photographer/dark.webp"
                     data-title="دموی دوم · حالت تیره"
                     aria-label="مشاهده نسخه موبایل دموی دوم، حالت تیره"
                   >
@@ -283,7 +311,7 @@
                   <div class="demo--poster" aria-hidden="true"></div>
                   <video
                     class="demo--video"
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     loop
                   >
@@ -327,7 +355,7 @@
                   <button
                     class="demo--view"
                     type="button"
-                    data-image="./assets/screenshots/demo-web-designer/light.jpg"
+                    data-image="./assets/screenshots/demo-web-designer/light.webp"
                     data-title="دموی سوم · حالت روشن"
                     aria-label="مشاهده نسخه موبایل دموی سوم، حالت روشن"
                   >
@@ -343,7 +371,7 @@
                   <div class="demo--poster" aria-hidden="true"></div>
                   <video
                     class="demo--video"
-                    preload="metadata"
+                    preload="none"
                     playsinline
                     loop
                   >
@@ -387,7 +415,7 @@
                   <button
                     class="demo--view"
                     type="button"
-                    data-image="./assets/screenshots/demo-web-designer/dark.jpg"
+                    data-image="./assets/screenshots/demo-web-designer/dark.webp"
                     data-title="دموی سوم · حالت تیره"
                     aria-label="مشاهده نسخه موبایل دموی سوم، حالت تیره"
                   >
@@ -399,7 +427,29 @@
             </div>
 
             <!-- == CONTACT FORM == -->
-            <form class="contact" id="contactForm" novalidate>
+            <form
+              class="contact"
+              id="contactForm"
+              action="https://formsubmit.co/nixelcode@gmail.com"
+              method="POST"
+              target="formTarget"
+              novalidate
+            >
+              <!-- FormSubmit settings -->
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_subject" value="پیام جدید از سایت نیکسل" />
+              <!-- after sending, FormSubmit redirects to this page (JS fills in the full URL) -->
+              <input type="hidden" name="_next" id="formNext" value="sent.html" />
+              <!-- honeypot against bots: must stay empty -->
+              <input
+                class="hp--field"
+                type="text"
+                name="_honey"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+              />
               <div class="contact--head">
                 <h3>برام پیام بذار</h3>
                 <p>سوال یا پیشنهادی داری؟ همین‌جا بنویس.</p>
@@ -454,12 +504,6 @@
                   ></span>
                   <span class="send--spinner" aria-hidden="true"></span>
                 </button>
-                <p
-                  class="form--status"
-                  id="formStatus"
-                  role="status"
-                  aria-live="polite"
-                ></p>
               </div>
             </form>
 
@@ -485,8 +529,12 @@
         <div class="cover--inner">
           <picture>
             <img
-              src="./assets/image/profile-img.png"
+              src="./assets/image/profile-img.webp"
               alt="user profile picture"
+              width="320"
+              height="320"
+              decoding="async"
+              fetchpriority="high"
             />
           </picture>
           <span class="cover--tag"> طراح | نیکو منصوری</span>
@@ -593,7 +641,22 @@
       </div>
     </div>
 
-    <script src="./assets/js/gsap.min.js"></script>
-    <script src="./assets/js/script.js"></script>
+    <!-- hidden target for the form so the page does not reload -->
+    <iframe
+      name="formTarget"
+      id="formTarget"
+      title="form target"
+      hidden
+      tabindex="-1"
+    ></iframe>
+
+    <!-- ====================== FORM RESULT TOAST ====================== -->
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <i class="fa-solid" id="toastIcon"></i>
+      <span id="toastText"></span>
+    </div>
+
+    <script src="./assets/js/gsap.min.js" defer></script>
+    <script src="./assets/js/script.js" defer></script>
   </body>
 </html>

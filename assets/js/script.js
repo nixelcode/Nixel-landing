@@ -1,10 +1,4 @@
-//FORM END POINT LINK=======================================
-
-const CONFIG = {
-  formEndpoint: "https://formsubmit.co/ajax/nixelcode@gmail.com",
-};
-
-//=====================================================================
+// The form endpoint is now the plain HTML form's `action` in index.html
 
 const container = document.getElementById("mainContainer");
 const cover = document.getElementById("cover");
@@ -82,6 +76,7 @@ if (window.gsap) {
 goButton.addEventListener("click", () => {
   if (!openTimeline) return;
   isOpen = true;
+  cover.classList.add("is-paused");
   openTimeline.timeScale(1).play();
   if (coverHidesOnOpen) cover.inert = true;
 });
@@ -91,6 +86,7 @@ backButton.addEventListener("click", () => {
   isOpen = false;
   pauseAllVideos();
   cover.inert = false;
+  cover.classList.remove("is-paused");
   openTimeline.timeScale(2.5).reverse();
 });
 
@@ -156,8 +152,6 @@ document.querySelectorAll(".demo--media").forEach((media) => {
   const video = media.querySelector(".demo--video");
   const playBtn = media.querySelector(".demo--play");
   const source = video.querySelector("source");
-  let raf = null;
-
   const markEmpty = () => {
     media.classList.add("is-empty");
     media.classList.remove("is-playing");
@@ -169,22 +163,15 @@ document.querySelectorAll(".demo--media").forEach((media) => {
     media.classList.remove("is-empty"),
   );
 
-  const loop = () => {
-    raf = requestAnimationFrame(loop);
-  };
-
   video.addEventListener("play", () => {
     players.forEach((p) => p.video !== video && p.video.pause());
     media.classList.add("is-playing", "has-played");
     playBtn.setAttribute("aria-label", "توقف ویدیو");
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(loop);
   });
 
   const onStop = () => {
     media.classList.remove("is-playing");
     playBtn.setAttribute("aria-label", "پخش ویدیو");
-    cancelAnimationFrame(raf);
   };
   video.addEventListener("pause", onStop);
   video.addEventListener("ended", onStop);
@@ -333,12 +320,35 @@ viewerScroller.addEventListener(
 
 enableSmoothWheel(viewerScroller);
 
-//5) Contact form
+//5) Contact form (plain HTML form -> hidden iframe, popup shows the result)
 
 const form = document.getElementById("contactForm");
-const statusEl = document.getElementById("formStatus");
+const formFrame = document.getElementById("formTarget");
 const sendBtn = form.querySelector(".send--button");
+const toast = document.getElementById("toast");
+const toastIcon = document.getElementById("toastIcon");
+const toastText = document.getElementById("toastText");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const SEND_TIMEOUT = 20000;
+
+// FormSubmit needs a full URL to redirect back to after a successful send
+document.getElementById("formNext").value = new URL(
+  "sent.html",
+  window.location.href,
+).href;
+
+let sending = false;
+let sendTimer = null;
+let toastTimer = null;
+
+function showToast(text, type) {
+  toastText.textContent = text;
+  toastIcon.className =
+    "fa-solid " + (type === "success" ? "fa-circle-check" : "fa-circle-xmark");
+  toast.className = `toast is-${type} is-show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("is-show"), 4500);
+}
 
 function setFieldError(input, message) {
   const err = input.parentElement.querySelector(".field--error");
@@ -372,44 +382,49 @@ function validate() {
   return !firstBad;
 }
 
-function setStatus(text, type) {
-  statusEl.textContent = text;
-  statusEl.className = "form--status" + (type ? ` is-${type}` : "");
-}
-
 form.querySelectorAll("input, textarea").forEach((input) => {
   input.addEventListener("input", () => {
     if (input.hasAttribute("aria-invalid")) setFieldError(input, "");
   });
 });
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  setStatus("");
-
-  sendBtn.classList.add("is-loading");
-  try {
-    const res = await fetch(CONFIG.formEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        name: form.elements.name.value.trim(),
-        email: form.elements.email.value.trim(),
-        message: form.elements.message.value.trim(),
-      }),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+function finishSend(ok) {
+  if (!sending) return;
+  sending = false;
+  clearTimeout(sendTimer);
+  sendBtn.classList.remove("is-loading");
+  if (ok) {
     form.reset();
-    setStatus("پیامت ارسال شد. ممنون!", "success");
-  } catch (err) {
-    setStatus("ارسال نشد. لطفاً دوباره تلاش کن.", "error");
-  } finally {
-    sendBtn.classList.remove("is-loading");
-    setStatus("", "");
+    showToast("پیامت ارسال شد. ممنون!", "success");
+  } else {
+    showToast("ارسال نشد. لطفاً دوباره تلاش کن.", "error");
   }
+}
+
+// The iframe finishes loading after FormSubmit answers.
+// On success FormSubmit redirects it to our own sent.html (same origin, readable).
+// Anything else (error page, activation page, ...) is cross-origin -> counts as failed.
+formFrame.addEventListener("load", () => {
+  if (!sending) return;
+  let ok = false;
+  try {
+    ok = formFrame.contentWindow.location.pathname.endsWith("sent.html");
+  } catch (err) {
+    ok = false;
+  }
+  finishSend(ok);
+});
+
+form.addEventListener("submit", (e) => {
+  if (sending || !validate()) {
+    e.preventDefault();
+    return;
+  }
+  sending = true;
+  sendBtn.classList.add("is-loading");
+  clearTimeout(sendTimer);
+  sendTimer = setTimeout(() => finishSend(false), SEND_TIMEOUT);
+  // no preventDefault: the browser submits the plain HTML form into the hidden iframe
 });
 
 //6) Buy button
