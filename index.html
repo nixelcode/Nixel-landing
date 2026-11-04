@@ -33,7 +33,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
       media="print"
-      onload="this.media='all'"
+      onload="this.media = 'all'"
     />
     <noscript>
       <link
@@ -65,12 +65,7 @@
               <article class="demo--card" data-theme="light">
                 <div class="demo--media">
                   <div class="demo--poster" aria-hidden="true"></div>
-                  <video
-                    class="demo--video"
-                    preload="none"
-                    playsinline
-                    loop
-                  >
+                  <video class="demo--video" preload="none" playsinline loop>
                     <source
                       src="./assets/videos/archi-light.webm"
                       type="video/webm"
@@ -129,12 +124,7 @@
               <article class="demo--card" data-theme="dark">
                 <div class="demo--media">
                   <div class="demo--poster" aria-hidden="true"></div>
-                  <video
-                    class="demo--video"
-                    preload="none"
-                    playsinline
-                    loop
-                  >
+                  <video class="demo--video" preload="none" playsinline loop>
                     <source
                       src="./assets/videos/archi-dark.webm"
                       type="video/webm"
@@ -189,12 +179,7 @@
               <article class="demo--card" data-theme="light">
                 <div class="demo--media">
                   <div class="demo--poster" aria-hidden="true"></div>
-                  <video
-                    class="demo--video"
-                    preload="none"
-                    playsinline
-                    loop
-                  >
+                  <video class="demo--video" preload="none" playsinline loop>
                     <source
                       src="./assets/videos/ph-light.webm"
                       type="video/webm"
@@ -249,12 +234,7 @@
               <article class="demo--card" data-theme="dark">
                 <div class="demo--media">
                   <div class="demo--poster" aria-hidden="true"></div>
-                  <video
-                    class="demo--video"
-                    preload="none"
-                    playsinline
-                    loop
-                  >
+                  <video class="demo--video" preload="none" playsinline loop>
                     <source
                       src="./assets/videos/ph-dark.webm"
                       type="video/webm"
@@ -309,12 +289,7 @@
               <article class="demo--card" data-theme="light">
                 <div class="demo--media">
                   <div class="demo--poster" aria-hidden="true"></div>
-                  <video
-                    class="demo--video"
-                    preload="none"
-                    playsinline
-                    loop
-                  >
+                  <video class="demo--video" preload="none" playsinline loop>
                     <source
                       src="./assets/videos/web-light.webm"
                       type="video/webm"
@@ -369,12 +344,7 @@
               <article class="demo--card" data-theme="dark">
                 <div class="demo--media">
                   <div class="demo--poster" aria-hidden="true"></div>
-                  <video
-                    class="demo--video"
-                    preload="none"
-                    playsinline
-                    loop
-                  >
+                  <video class="demo--video" preload="none" playsinline loop>
                     <source
                       src="./assets/videos/web-dark.webm"
                       type="video/webm"
@@ -430,21 +400,29 @@
             <form
               class="contact"
               id="contactForm"
-              action="https://formsubmit.co/nixelcode@gmail.com"
+              action="https://api.web3forms.com/submit"
               method="POST"
               novalidate
             >
-              <!-- FormSubmit settings -->
-              <input type="hidden" name="_captcha" value="false" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_subject" value="پیام جدید از سایت نیکسل" />
-              <!-- after sending, FormSubmit redirects back to this page (JS fills in the full URL) -->
-              <input type="hidden" name="_next" id="formNext" value="" />
+              <!-- Web3Forms settings -->
+              <input
+                type="hidden"
+                name="access_key"
+                value="23e68b98-94ff-4c61-9e82-c80b9fa3b826"
+              />
+              <input
+                type="hidden"
+                name="subject"
+                value="پیام جدید از سایت نیکسل"
+              />
+              <input type="hidden" name="from_name" value="سایت نیکسل" />
+              <!-- after sending, Web3Forms redirects back to this page (JS fills in the full URL) -->
+              <input type="hidden" name="redirect" id="formNext" value="" />
               <!-- honeypot against bots: must stay empty -->
               <input
                 class="hp--field"
-                type="text"
-                name="_honey"
+                type="checkbox"
+                name="botcheck"
                 tabindex="-1"
                 autocomplete="off"
                 aria-hidden="true"
