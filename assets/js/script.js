@@ -320,25 +320,22 @@ viewerScroller.addEventListener(
 
 enableSmoothWheel(viewerScroller);
 
-//5) Contact form (plain HTML form -> hidden iframe, popup shows the result)
+//5) Contact form (plain HTML form; FormSubmit redirects back with ?sent=1)
 
 const form = document.getElementById("contactForm");
-const formFrame = document.getElementById("formTarget");
 const sendBtn = form.querySelector(".send--button");
 const toast = document.getElementById("toast");
 const toastIcon = document.getElementById("toastIcon");
 const toastText = document.getElementById("toastText");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const SEND_TIMEOUT = 20000;
 
-// FormSubmit needs a full URL to redirect back to after a successful send
-document.getElementById("formNext").value = new URL(
-  "sent.html",
-  window.location.href,
-).href;
+// FormSubmit redirects back to this URL after a successful send
+const backUrl = new URL(window.location.href);
+backUrl.search = "?sent=1";
+backUrl.hash = "";
+document.getElementById("formNext").value = backUrl.href;
 
 let sending = false;
-let sendTimer = null;
 let toastTimer = null;
 
 function showToast(text, type) {
@@ -388,31 +385,17 @@ form.querySelectorAll("input, textarea").forEach((input) => {
   });
 });
 
-function finishSend(ok) {
-  if (!sending) return;
-  sending = false;
-  clearTimeout(sendTimer);
-  sendBtn.classList.remove("is-loading");
-  if (ok) {
-    form.reset();
-    showToast("پیامت ارسال شد. ممنون!", "success");
-  } else {
-    showToast("ارسال نشد. لطفاً دوباره تلاش کن.", "error");
-  }
+// Back from FormSubmit with ?sent=1 -> success popup
+if (new URLSearchParams(window.location.search).get("sent") === "1") {
+  history.replaceState(null, "", window.location.pathname);
+  showToast("پیامت ارسال شد. ممنون!", "success");
 }
 
-// The iframe finishes loading after FormSubmit answers.
-// On success FormSubmit redirects it to our own sent.html (same origin, readable).
-// Anything else (error page, activation page, ...) is cross-origin -> counts as failed.
-formFrame.addEventListener("load", () => {
-  if (!sending) return;
-  let ok = false;
-  try {
-    ok = formFrame.contentWindow.location.pathname.endsWith("sent.html");
-  } catch (err) {
-    ok = false;
-  }
-  finishSend(ok);
+// User came back (back button) from FormSubmit without a success redirect -> failed
+window.addEventListener("pageshow", (e) => {
+  sendBtn.classList.remove("is-loading");
+  if (e.persisted && sending) showToast("ارسال نشد. لطفاً دوباره تلاش کن.", "error");
+  sending = false;
 });
 
 form.addEventListener("submit", (e) => {
@@ -420,11 +403,14 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
     return;
   }
+  if (!navigator.onLine) {
+    e.preventDefault();
+    showToast("ارسال نشد. اتصال اینترنت رو چک کن.", "error");
+    return;
+  }
   sending = true;
   sendBtn.classList.add("is-loading");
-  clearTimeout(sendTimer);
-  sendTimer = setTimeout(() => finishSend(false), SEND_TIMEOUT);
-  // no preventDefault: the browser submits the plain HTML form into the hidden iframe
+  // no preventDefault: the browser submits the plain HTML form
 });
 
 //6) Buy button

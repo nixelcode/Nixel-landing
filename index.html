@@ -432,15 +432,14 @@
               id="contactForm"
               action="https://formsubmit.co/nixelcode@gmail.com"
               method="POST"
-              target="formTarget"
               novalidate
             >
               <!-- FormSubmit settings -->
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_subject" value="پیام جدید از سایت نیکسل" />
-              <!-- after sending, FormSubmit redirects to this page (JS fills in the full URL) -->
-              <input type="hidden" name="_next" id="formNext" value="sent.html" />
+              <!-- after sending, FormSubmit redirects back to this page (JS fills in the full URL) -->
+              <input type="hidden" name="_next" id="formNext" value="" />
               <!-- honeypot against bots: must stay empty -->
               <input
                 class="hp--field"
@@ -640,15 +639,6 @@
         <i class="fa-solid fa-chevron-down"></i>
       </div>
     </div>
-
-    <!-- hidden target for the form so the page does not reload -->
-    <iframe
-      name="formTarget"
-      id="formTarget"
-      title="form target"
-      hidden
-      tabindex="-1"
-    ></iframe>
 
     <!-- ====================== FORM RESULT TOAST ====================== -->
     <div class="toast" id="toast" role="status" aria-live="polite">
